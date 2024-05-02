@@ -1,5 +1,5 @@
 import PyPDF2
-from utils import to_lower
+from parsers.utils import process_text
 
 class PDFParser:
     pdf_content = None
@@ -24,14 +24,21 @@ class PDFParser:
 
     def process_text(self):
         raw_text = self.get_text()
-        lower_case_text = to_lower(raw_text)
-        return lower_case_text
+        processed_text = process_text(raw_text)
+        return processed_text
+
+    def parse_to_text(self, output_file = 'output/output-pdf.txt'):
+        text = self.process_text()
+        with open(output_file, 'w') as file:
+            file.write(text)
+        file.close()
 
 if __name__ == '__main__':
-    parser = PDFParser('input/BT20CSE040-Harsh-Tripathi.pdf')
+    parser = PDFParser('input/pdf-sample.pdf')
 
     print(parser.get_metadata())
     print(parser.get_num_pages())
     # parser.get_text()
     print(parser.process_text())
+    parser.parse_to_text('output/output-pdf.txt')
     #print(parser.parse('input/BT20CSE040-Harsh-Tripathi.pdf'))
